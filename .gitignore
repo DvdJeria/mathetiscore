@@ -1,0 +1,32 @@
+# IDEs y Editores de código
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Java / Spring Boot / Maven / Gradle
+target/
+build/
+.gradle/
+*.class
+*.jar
+*.war
+
+# Node.js / Frontend
+node_modules/
+.next/
+dist/
+out/
+*.log
+
+# Variables de Entorno y Claves Secreta (CRÍTICO)
+.env
+.env.local
+.env.development.local
+.env.production.local
+*.pem
+*.key
+
+# Archivos del Sistema Operativo
+Thumbs.db
