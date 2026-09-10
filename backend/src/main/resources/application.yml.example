@@ -1,0 +1,7 @@
+# Plantilla de Configuración de Entorno Local
+# Copia las siguientes variables de entorno en la configuración de ejecución de tu IDE (Run/Debug Configurations)
+# o defínelas en tu terminal antes de compilar.
+
+SPRING_DATASOURCE_URL=jdbc:postgresql://aws-0-us-west-2.pooler.supabase.com:6543/postgres?sslmode=require
+SPRING_DATASOURCE_USERNAME=postgres.jxdxdhlkxxecuryfumxb
+SPRING_DATASOURCE_PASSWORD=tu_contraseña_aqui
