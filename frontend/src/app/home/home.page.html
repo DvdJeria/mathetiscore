@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>MathetiScore - Panel Principal</ion-title>
+    <!-- Botón en la barra superior -->
+    <ion-button slot="end" fill="clear" color="light" (click)="onLogout()">
+      Cerrar Sesión
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+  <h2>¡Bienvenido al sistema!</h2>
+  <p>Has iniciado sesión correctamente con Supabase.</p>
+
+  <ion-button color="danger" class="ion-margin-top" (click)="onLogout()">
+    Cerrar Sesión
+  </ion-button>
+</ion-content>
