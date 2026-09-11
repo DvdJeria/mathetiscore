@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>MathetiScore - Iniciar Sesión</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div style="max-width: 400px; margin: 2rem auto;">
+
+    <ion-item>
+      <ion-label position="stacked">Correo Electrónico</ion-label>
+      <ion-input
+        type="email"
+        [(ngModel)]="email">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Contraseña</ion-label>
+      <ion-input
+        type="password"
+        [(ngModel)]="password">
+      </ion-input>
+    </ion-item>
+
+    @if (errorMessage) {
+      <div style="color: var(--ion-color-danger); margin-top: 1rem; font-size: 0.9rem;">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <ion-button
+      expand="block"
+      class="ion-margin-top"
+      (click)="onLogin()"
+      [disabled]="loading">
+      @if (loading) {
+        <ion-spinner name="crescent"></ion-spinner>
+      } @else {
+        <span>Ingresar</span>
+      }
+    </ion-button>
+
+  </div>
+</ion-content>
