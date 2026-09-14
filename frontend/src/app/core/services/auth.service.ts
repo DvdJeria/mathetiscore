@@ -1,19 +1,32 @@
-import {Injectable} from '@angular/core';
+import {Injectable, inject} from '@angular/core';
 import {createClient, SupabaseClient} from "@supabase/supabase-js";
 import {environment} from '../../../environments/environment';
+import { UserService } from '../services/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private readonly userService =inject(UserService);
   private supabase: SupabaseClient
 
   constructor() {
-    this.supabase = createClient(
-      environment.supabaseUrl,
-      environment.supabaseKey
-    )
+    this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey)
+
+    //Escucha los cambios de estado en la autenticación de Supabase (Login, Logout, AutoLogin)
+    this.supabase.auth.onAuthStateChange((event, session) => {
+      if(session?.user){
+        //Usuario autenticado en Supabase -> Cargar perfil desde Springboot
+        this.userService.fetchUserProfile(session.user.id).subscribe({
+          error: (err) => console.error('Error al sincronizar perfil con Spring Boot:', err),
+        })
+      }else {
+        //Sesión cerrada, limpiar estado de la memoria
+        this.userService.clearProfile();
+      }
+    });
+
   }
 
   /*

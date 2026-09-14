@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <!-- Menú hamburguesa a la izquierda -->
+    <ion-buttons slot="start">
+      <ion-menu-button contentId="main-content"></ion-menu-button>
+    </ion-buttons>
+
+    <!-- Nombre del usuario activo al centro/izquierda -->
+    <ion-title>
+      @if (userProfile(); as user) {
+        {{ nombreCompleto }}
+      } @else {
+        Cargando...
+      }
+    </ion-title>
+
+    <!-- Botón de salir a la derecha usando tu método onLogout() -->
+    <ion-buttons slot="end">
+      <ion-button (click)="onLogout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="main-content" class="ion-padding">
+  @if (userProfile(); as user) {
+    <div class="welcome-card">
+      <!-- Concatenación directa de los campos del JSON -->
+      <h2>¡Bienvenido, {{ nombreCompleto }}!</h2>
+      <p>RUT: <span>{{ user.rut }}</span></p>
+      @if (user.rolNombre) {
+        <p>Rol: <strong>{{ user.rolNombre }}</strong></p>
+      }
+    </div>
+  } @else {
+    <div class="loading-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando información del usuario...</p>
+    </div>
+  }
+</ion-content>

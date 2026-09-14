@@ -13,9 +13,15 @@ La documentación del proyecto está estructurada de forma modular para facilita
 
 ### Arquitectura por Módulos
 1. **[01. Módulo de Autenticación](docs/architecture/01-authentication.md)**
-    * Servicio `AuthService` (Singleton Supabase).
-    * Protección de rutas mediante `authGuard` (`CanActivateFn`).
-    * Interfaz de usuario `LoginPage` y flujo de `logout`.
+   * Servicio `AuthService` (Singleton Supabase).
+   * Protección de rutas mediante `authGuard` (`CanActivateFn`).
+   * Interfaz de usuario `LoginPage` y flujo de `logout`.
+
+2. **[02. Módulo de RBAC, Roles y Navegación Dinámica](docs/architecture/02-rbac-navegacion.md)**
+   * Arquitectura centralizada de roles (`Role` enum).
+   * Control de acceso estricto y pase libre de auditoría para `SUPER_ADMIN` mediante `rolGuard`.
+   * Enrutamiento jerárquico con múltiples guards (`authGuard` + `rolGuard`).
+   * Menú lateral adaptativo reactivo con componentes Ionic Standalone (`[button]="true"` y directivas `@if`).
 
 ---
 
