@@ -1,3 +1,48 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menú Principal</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle auto-hide="false">
+          <ion-item [button]="true" routerLink="/home" routerDirection="root">
+            <ion-label>Inicio</ion-label>
+          </ion-item>
+
+          <!-- Opciones exclusivamente para Administradores -->
+          @if (userRole() === Role.SUPER_ADMIN || userRole() === Role.ADMIN_SEDE) {
+            <ion-item [button]="true" routerLink="/admin/gestion-usuarios" routerDirection="root">
+              <ion-label>Gestión de Usuarios</ion-label>
+            </ion-item>
+          }
+
+          <!-- Opciones exclusivamente para Docentes -->
+          @if (userRole() === Role.SUPER_ADMIN || userRole() === Role.DOCENTE) {
+            <ion-item [button]="true" routerLink="/docente/dashboard" routerDirection="root">
+              <ion-label>Mi Panel Docente</ion-label>
+            </ion-item>
+            <ion-item [button]="true" routerLink="/docente/tomar-asistencia" routerDirection="root">
+              <ion-label>Tomar Asistencia/ion-label></ion-label>
+            </ion-item>
+          }
+
+          <!-- Opciones para Estudiantes / Apoderados -->
+          @if (userRole() === Role.SUPER_ADMIN || userRole() === Role.ESTUDIANTE || userRole() === Role.APODERADO) {
+            <ion-item [button]="true" routerLink="//estudiante/dashboard" routerDirection="root">
+              <ion-label>Mi Dashboard</ion-label>
+            </ion-item>
+          }
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Envoltorio nativo ion-page para que flexbox tome el 100% de la pantalla -->
+  <div class="ion-page" id="main-content">
+    <ion-router-outlet></ion-router-outlet>
+  </div>
 </ion-app>
