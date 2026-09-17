@@ -1,4 +1,4 @@
-package com.mathetiscore.api.infraestructure.repository;
+package com.mathetiscore.api.infraestructure.repository.mapper;
 
 import com.mathetiscore.api.domain.model.Role;
 import com.mathetiscore.api.domain.model.User;

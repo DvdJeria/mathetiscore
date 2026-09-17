@@ -1,4 +1,4 @@
-package com.mathetiscore.api.infraestructure.repository;
+package com.mathetiscore.api.infraestructure.repository.jpa;
 
 import com.mathetiscore.api.infraestructure.entity.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
