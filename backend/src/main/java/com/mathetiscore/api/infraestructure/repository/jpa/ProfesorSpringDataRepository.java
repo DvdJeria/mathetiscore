@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-@Component
 public interface ProfesorSpringDataRepository extends JpaRepository<ProfesorEntity, UUID> {
 }

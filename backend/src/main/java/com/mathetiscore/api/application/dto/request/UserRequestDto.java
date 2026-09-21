@@ -1,4 +1,4 @@
-package com.mathetiscore.api.application.dto;
+package com.mathetiscore.api.application.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -22,6 +22,6 @@ public class RoleEntity {
     @Column(name = "rol_nombre", nullable = false, unique = true, length = 50)
     private String nombre;
 
-    @Column(name = "rol_descripcion", columnDefinition = "TEST")
+    @Column(name = "rol_descripcion", columnDefinition = "TEXT")
     private String descripcion;
 }

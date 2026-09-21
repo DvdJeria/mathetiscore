@@ -1,25 +1,38 @@
 package com.mathetiscore.api.infraestructure.repository.adapter;
-
 import com.mathetiscore.api.domain.model.Profesor;
 import com.mathetiscore.api.domain.port.ProfesorRepositoryPort;
 import com.mathetiscore.api.infraestructure.entity.ProfesorEntity;
-//import com.mathetiscore.api.infraestructure.repository.jpa.
 import com.mathetiscore.api.infraestructure.repository.jpa.ProfesorSpringDataRepository;
+import com.mathetiscore.api.infraestructure.repository.mapper.ProfesorPersistenceMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
-@Component
+@Repository
 @RequiredArgsConstructor
-public class ProfesorRepositoryAdapter {
+public class ProfesorRepositoryAdapter implements ProfesorRepositoryPort{
+
     private final ProfesorSpringDataRepository profesorSpringDataRepository;
+    private final ProfesorPersistenceMapper profesorPersistenceMapper;
 
-    public void save(UUID usuarioId, Long tmaId, UUID asedId){
-        ProfesorEntity entity = new ProfesorEntity();
-        entity.setUsuarioId(usuarioId);
-        entity.setAsedId(asedId);
+    @Override
+    public Profesor save(Profesor profesor){
+        // 1. Convertir el modelo de dominio en Entidad JPA
+        ProfesorEntity entity = profesorPersistenceMapper.toEntity(profesor);
 
-        profesorSpringDataRepository.save(entity);
+        //Guardar usando Spring Data JPA
+        ProfesorEntity savedEntity = profesorSpringDataRepository.save(entity);
+
+        //3. Convertir la entidad  guardada de vuelta a modelo de dominio y retornarla
+        return profesorPersistenceMapper.toDomain(savedEntity);
     }
+
+    @Override
+    public Optional<Profesor> findById(UUID id){
+        return profesorSpringDataRepository.findById(id)
+                .map(profesorPersistenceMapper::toDomain);
+    }
+
 }

@@ -1,18 +1,23 @@
 package com.mathetiscore.api.application.service;
 
-import com.mathetiscore.api.application.dto.UserRequestDto;
-import com.mathetiscore.api.application.dto.UserResponseDto;
+import com.mathetiscore.api.application.dto.request.ProfesorRequestDto;
+import com.mathetiscore.api.application.dto.response.ProfesorResponseDto;
+import com.mathetiscore.api.application.dto.response.UserResponseDto;
 import com.mathetiscore.api.domain.model.Profesor;
 import com.mathetiscore.api.domain.model.Role;
 import com.mathetiscore.api.domain.model.User;
-import com.mathetiscore.api.domain.port.AlumnoRepositoryPort;
 import com.mathetiscore.api.domain.port.ProfesorRepositoryPort;
 import com.mathetiscore.api.domain.port.UserRepositoryPort;
+import com.mathetiscore.api.infraestructure.entity.RoleEntity;
+import com.mathetiscore.api.infraestructure.entity.TituloMaestroEntity;
+import com.mathetiscore.api.infraestructure.entity.TituloProfesorEntity;
+import com.mathetiscore.api.infraestructure.repository.jpa.RoleSpringDataRepository;
+import com.mathetiscore.api.infraestructure.repository.jpa.TituloMaestroSpringDataRepository;
+import com.mathetiscore.api.infraestructure.repository.jpa.TituloProfesorSpringDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import tools.jackson.databind.cfg.MapperBuilder;
 
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
@@ -20,10 +25,11 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepositoryPort userRepositoryPort;
-    private final MapperBuilder mapperBuilder;
-
     private final ProfesorRepositoryPort profesorRepositoryPort;
-    private final AlumnoRepositoryPort alumnoRepositoryPort;
+    private final RoleSpringDataRepository roleSpringDataRepository;
+    private final TituloProfesorSpringDataRepository tituloProfesorSpringDataRepository;
+    private final TituloMaestroSpringDataRepository tituloMaestroSpringDataRepository;
+    //private final MapperBuilder mapperBuilder;
 
     public UserResponseDto getUserById(UUID id){
         User user = userRepositoryPort.finById(id)
@@ -53,6 +59,92 @@ public class UserService {
                 .build();
     }
 
+    public ProfesorResponseDto createProfesor(ProfesorRequestDto dto){
+
+        //1. Buscar el rol Profesor usando el JPA existente
+        RoleEntity roleEntity = roleSpringDataRepository.findByNombre("PROFESOR")
+                .orElseThrow(() -> new RuntimeException("El rol Profesor no existe"));
+
+        Role roleDomain = new Role(
+                roleEntity.getId(),
+                roleEntity.getNombre(),
+                roleEntity.getDescripcion()
+        );
+
+        //2. Mapear y guardar el usuario base usando el puerto UserRepositoryport
+        User userDomain = new User(
+                null,
+                dto.getNombre(),
+                dto.getApellidoPaterno(),
+                dto.getApellidoMaterno(),
+                dto.getEmail(),
+                dto.getPassword(),
+                dto.getUsuarioDescripcion(),
+                roleDomain
+        );
+        User savedUser = userRepositoryPort.save(userDomain);
+
+        //3. Crear y guardar el registro en la tabla "Profesor" usando ProfesorRepositoryPort
+        Profesor profesorDomain = new Profesor();
+                profesorDomain.setProfId(null);
+                profesorDomain.setDescripcion(dto.getProfesorDescripcion());
+                profesorDomain.setUsuarioId(savedUser.getId());
+                profesorDomain.setAsedId(dto.getAsedId());
+                profesorDomain.setTmaId(dto.getTmaId());
+        Profesor savedProfesor = profesorRepositoryPort.save(profesorDomain);
+
+        String annoStr = null;
+        //4. Guardar el título profesional en "titulos_profesor"
+        if(dto.getTmaId() > 0){
+
+            TituloMaestroEntity tituloMaestroEntity = tituloMaestroSpringDataRepository.findById(dto.getTmaId())
+                    .orElseThrow(() -> new RuntimeException("El título maestro con ID " + dto.getTmaId() + " no fue encontrado"));
+
+            TituloProfesorEntity tituloEntity = new TituloProfesorEntity();
+
+            tituloEntity.setId(savedProfesor.getProfId());
+            tituloEntity.setTituloMaestroEntity(tituloMaestroEntity);
+            tituloEntity.setInstitutoEgreso(dto.getInstitutoEgreso());
+
+            //Conversión obligatorio de LocalDate a String
+
+            if(dto.getAnnoTitulacion() != null){
+                annoStr = String.valueOf(dto.getAnnoTitulacion().getYear());
+            }
+            tituloEntity.setAnnoTitulacion(annoStr);
+            tituloEntity.setUrlDocumento(dto.getUrlDocumento());
+            tituloEntity.setDescripcion(dto.getTituloDescripcion());
+
+            tituloProfesorSpringDataRepository.save(tituloEntity);
+
+
+        }
+
+        //5. Retornar el DTO completo de respuesta con toda la estructura
+        return new ProfesorResponseDto(
+                savedUser.getId(),
+                savedUser.getNombre(),
+                savedUser.getApellidoPaterno(),
+                savedUser.getApellidoMaterno(),
+                savedUser.getEmail(),
+                savedUser.getRut(),
+                savedUser.getDescripcion(),
+                roleDomain.getNombre(),
+
+                savedProfesor.getProfId(),
+                savedProfesor.getDescripcion(),
+                savedProfesor.getAsedId(),
+
+                dto.getTmaId(),
+                dto.getInstitutoEgreso(),
+                annoStr,
+                dto.getUrlDocumento(),
+                dto.getTituloDescripcion()
+        );
+
+    }
+
+    /*
     @Transactional
     public UserResponseDto createUser(UserRequestDto request){
         //Primero hay que validar si el correo existe
@@ -98,5 +190,8 @@ public class UserService {
         return mapToDo(savedUser);
 
     }
+    */
+
+
 
 }
