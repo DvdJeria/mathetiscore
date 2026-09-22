@@ -1,0 +1,23 @@
+$kind: http-request
+url: http://localhost:8080/api/v1/users/profesor
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "rut": "12345678-9",
+      "nombre": "Carlos",
+      "apellidoPaterno": "González",
+      "apellidoMaterno": "Pérez",
+      "email": "carlos.profesor@mathetiscore.com",
+      "password": "SecurePassword123*",
+      "usuarioDescripcion": "Profesor del departamento de ciencias exactas",
+      "profesorDescripcion": "Especialista en álgebra y cálculo superior",
+      "asedId": "5e295154-83c3-408c-97e6-4d859f385763",
+      "tmaId": 2,
+      "institutoEgreso": "Universidad de Chile",
+      "annoTitulacion": "2018-12-15",
+      "urlDocumento": "https://tuservidor.com/docs/titulo_carlos.pdf",
+      "tituloDescripcion": "Título de Profesor de Matemáticas y Computación"
+    }
+order: 1790092287873

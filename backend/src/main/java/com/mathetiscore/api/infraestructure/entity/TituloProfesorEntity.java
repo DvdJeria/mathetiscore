@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +26,7 @@ public class TituloProfesorEntity {
     private String institutoEgreso;
 
     @Column(name = "tprof_anno_titulacion")
-    private String annoTitulacion;
+    private LocalDate annoTitulacion;
 
     @Column(name = "tprof_url_documento")
     private String urlDocumento;

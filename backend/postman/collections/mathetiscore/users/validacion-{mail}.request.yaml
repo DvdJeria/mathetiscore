@@ -1,0 +1,7 @@
+$kind: http-request
+name: validacion/{mail}
+url: http://localhost:8080/api/v1/users/search?email=profesor@mathetiscore.com
+method: GET
+queryParams:
+  email: profesor@mathetiscore.com
+order: 628279121933071

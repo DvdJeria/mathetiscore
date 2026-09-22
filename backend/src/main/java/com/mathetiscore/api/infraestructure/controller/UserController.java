@@ -24,7 +24,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @GetMapping("/Search")
+    @GetMapping("/search")
     public ResponseEntity<UserResponseDto> getUserByEmail(@RequestParam String email) {
         return ResponseEntity.ok(userService.getUserByEmail(email));
     }

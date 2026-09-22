@@ -1,0 +1,5 @@
+$kind: http-request
+name: validacion/{id}
+url: http://localhost:8080/api/v1/users/b5017b25-94be-4f58-95a1-76c6349a6dfb
+method: GET
+order: 573956662266824

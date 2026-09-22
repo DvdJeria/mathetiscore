@@ -3,10 +3,10 @@ package com.mathetiscore.api.infraestructure.repository.adapter;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.mathetiscore.api.domain.model.User;
 import com.mathetiscore.api.infraestructure.repository.mapper.UserPersistenceMapper;
 import com.mathetiscore.api.infraestructure.repository.jpa.UserSpringDataRepository;
 import org.springframework.stereotype.Component;
-import com.mathetiscore.api.domain.model.User;
 import com.mathetiscore.api.domain.port.UserRepositoryPort;
 import com.mathetiscore.api.infraestructure.entity.UsuarioEntity;
 import lombok.RequiredArgsConstructor;
