@@ -18,7 +18,6 @@ import java.util.UUID;
 public class TituloProfesorEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "tprof_id")
     private UUID id;
 

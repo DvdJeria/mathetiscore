@@ -29,14 +29,14 @@ public class SupabaseAuthRepositoryAdapter implements AuthPort {
         //Configurar cabeceras para la api admin de Supabase
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("api-key", serviceRoleKey);
+        headers.set("apikey", serviceRoleKey);
         headers.set("Authorization", "Bearer " + serviceRoleKey);
 
         //Cuerpo de la petición con las credenciales
         Map<String , Object> body = new HashMap<>();
         body.put("email", email);
         body.put("password", Password);
-        body.put("email_confirm", email);
+        body.put("email_confirm", true);
 
         HttpEntity<Map<String , Object>> request = new HttpEntity<>(body, headers);
 

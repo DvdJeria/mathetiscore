@@ -19,7 +19,7 @@ public class UserPersistenceAdapter implements UserRepositoryPort {
     private final UserPersistenceMapper mapper;
 
     @Override
-    public Optional<User> finById(UUID id) {
+    public Optional<User> findById(UUID id) {
         return springDataRepository.findById(id)
                 .map(mapper::toDomain);
     }

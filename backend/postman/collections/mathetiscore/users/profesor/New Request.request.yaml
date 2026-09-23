@@ -9,7 +9,7 @@ body:
       "nombre": "Carlos",
       "apellidoPaterno": "González",
       "apellidoMaterno": "Pérez",
-      "email": "carlos.profesor@mathetiscore.com",
+      "email": "carlos.profesor.test3@mathetiscore.com",
       "password": "SecurePassword123*",
       "usuarioDescripcion": "Profesor del departamento de ciencias exactas",
       "profesorDescripcion": "Especialista en álgebra y cálculo superior",

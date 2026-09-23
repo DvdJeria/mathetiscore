@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.mathetiscore.api.domain.model.User;
 
 public interface UserRepositoryPort {
-    Optional<User> finById(UUID id);
+    Optional<User> findById(UUID id);
     Optional<User> findByEmail(String email);
     User save(User user);
 }

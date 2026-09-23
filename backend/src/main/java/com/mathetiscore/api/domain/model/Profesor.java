@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -28,7 +29,7 @@ public class Profesor {
     // --- Datos del Título Profesional (relacionados con titulos_profesor) ---
     private Long tmaId;             // ID del título maestro del catálogo
     private String institutoEgreso; // Dónde se tituló
-    private String annoTitulacion;  // Año en que obtuvo el título
+    private LocalDate annoTitulacion;  // Año en que obtuvo el título
     private String urlDocumento;    // Enlace al documento/certificado adjunto
     private String tituloDescripcion; // Descripción específica del título (opcional)
 }

@@ -30,7 +30,7 @@ public class ProfesorRequestDto {
     private String profesorDescripcion;
 
     // Datos para la tabla 'titulos_profesor'
-    private long tmaId;
+    private Long tmaId;
     private String institutoEgreso;
     private LocalDate annoTitulacion;
     private String urlDocumento;
