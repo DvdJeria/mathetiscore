@@ -28,4 +28,8 @@ public class User {
         if(apellidoMaterno != null) sb.append(apellidoMaterno);
         return sb.toString().trim();
     }
+
+    public void roleId() {
+
+    }
 }

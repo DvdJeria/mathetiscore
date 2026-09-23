@@ -5,11 +5,11 @@ body:
   type: json
   content: |-
     {
-      "rut": "12345678-9",
+      "rut": "12345678-1",
       "nombre": "Carlos",
       "apellidoPaterno": "González",
       "apellidoMaterno": "Pérez",
-      "email": "carlos.profesor.test3@mathetiscore.com",
+      "email": "carlos.profesor.test4@mathetiscore.com",
       "password": "SecurePassword123*",
       "usuarioDescripcion": "Profesor del departamento de ciencias exactas",
       "profesorDescripcion": "Especialista en álgebra y cálculo superior",
