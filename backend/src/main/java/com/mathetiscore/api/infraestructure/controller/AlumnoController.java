@@ -19,7 +19,7 @@ public class AlumnoController {
 
     private final AlumnoService alumnoService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<AlumnoResponseDto> createAlumno(@Validated @RequestBody AlumnoRequestDto dto) {
         AlumnoResponseDto alumnoResponseDto = alumnoService.createAlumno(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(alumnoResponseDto);

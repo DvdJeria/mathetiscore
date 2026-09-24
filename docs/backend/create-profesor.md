@@ -1,44 +1,55 @@
-# Feature: Registro de Profesores (createProfesor)
+# Documentación Técnica: Módulo de Registro de Profesores (Arquitectura Hexagonal)
 
-## Descripción General
-Implementación del endpoint especializado para el registro de nuevos profesores bajo **Arquitectura Hexagonal**. El flujo se encarga de orquestar la autenticación externa en **Supabase Auth**, aprovechar los triggers de base de datos para la sincronización inicial de la tabla `usuario`, y realizar la persistencia transaccional dual en las tablas `profesor` y `titulos_profesor`.
-
----
-
-## Arquitectura y Componentes
-El flujo respeta los límites de la arquitectura hexagonal:
-
-1. **Dominio (`Domain`)**:
-   - Modelos de dominio (`Profesor`, etc.) y puertos de salida (`AuthPort`, `ProfesorRepositoryPort`).
-2. **Aplicación (`Application`)**:
-   - Servicios de aplicación que coordinan la lógica de negocio y mapeo hacia los DTOs (`ProfesorRequestDto`, `ProfesorResponseDto`).
-3. **Infraestructura (`Infrastructure`)**:
-   - **`SupabaseAuthRepositoryAdapter`**: Adaptador REST para comunicarse con la API administrativa de Supabase (`/auth/v1/admin/users`) enviando las cabeceras requeridas (`apikey` y `Authorization: Bearer <secret_key>`).
-   - **`ProfesorRepositoryAdapter`**: Adaptador de persistencia JPA encargado del guardado secuencial (primero `ProfesorEntity` para recuperar el ID autogenerado, y posteriormente `TituloProfesorEntity` asegurando la relación no nula).
+## 1. Resumen y Contexto
+Este documento registra la arquitectura, el flujo transaccional y la solución implementada para aislar la creación de profesores del módulo monolítico de usuarios (`UserService`), estableciendo un flujo secuencial robusto basado en **Arquitectura Hexagonal**.
 
 ---
 
-## Endpoint API
+## 2. Flujo Secuencial de Creación (`ProfesorService`)
+El registro de un profesor se ejecuta de manera transaccional (`@Transactional`) y estrictamente secuencial para respetar la jerarquía de llaves foráneas en la base de datos:
 
-* **URL:** `/api/v1/users/profesor`
-* **Método:** `POST`
-* **Content-Type:** `application/json`
+1. **Creación del Usuario Base (Auth + Tabla `usuario`):**
+   * Se invoca a `UserRegistrationHelper` para registrar las credenciales en Supabase Auth y persistir el perfil base en la tabla `usuario` utilizando el UUID generado.
+2. **Registro del Perfil de Profesor:**
+   * Se crea la entidad `Profesor` vinculada al `usu_id` del usuario recién creado y a su respectiva sede (`ased_id`), persistiendo a través de `ProfesorRepositoryPort`.
+3. **Registro de Antecedentes / Títulos Docentes:**
+   * Si el request incluye datos de titulación (`tma_id != null`), se persiste en la tabla `titulos_profesor` utilizando de manera segura el `prof_id` obtenido en el paso anterior.
 
-### Payload de Ejemplo (`ProfesorRequestDto`)
-```json
-{
-  "rut": "12345678-9",
-  "nombre": "Carlos",
-  "apellidoPaterno": "González",
-  "apellidoMaterno": "Pérez",
-  "email": "carlos.profesor@mathetiscore.com",
-  "password": "SecurePassword123*",
-  "usuarioDescripcion": "Profesor del departamento de ciencias exactas",
-  "profesorDescripcion": "Especialista en álgebra y cálculo superior",
-  "asedId": "5e295154-83c3-408c-97e6-4d859f385763",
-  "tmaId": 2,
-  "institutoEgreso": "Universidad de Chile",
-  "annoTitulacion": "2018-12-15",
-  "urlDocumento": "[https://tuservidor.com/docs/titulo_carlos.pdf](https://tuservidor.com/docs/titulo_carlos.pdf)",
-  "tituloDescripcion": "Título de Profesor de Matemáticas y Computación"
+---
+
+## 3. Componentes Principales
+
+### Capa de Presentación / Aplicación
+* **`ProfesorController`**: Expone el endpoint POST en `/api/v1/profesor`.
+* **`ProfesorService`**: Orquesta el flujo de negocio y la secuencia transaccional.
+
+### Capa de Infraestructura (Adaptadores y Persistencia)
+* **`TituloProfesorRepositoryAdapter`**: Implementa `TituloProfesorRepositoryPort`. Utiliza `EntityManager.getReference()` para asociar las entidades relacionadas (`ProfesorEntity` y `TituloMaestroEntity`) como referencias gestionadas por Hibernate, evitando inserciones duplicadas no deseadas.
+
+```java
+@Component
+@RequiredArgsConstructor
+public class TituloProfesorRepositoryAdapter implements TituloProfesorRepositoryPort {
+
+    private final TituloProfesorSpringDataRepository repository;
+    private final EntityManager entityManager;
+
+    @Override
+    public TituloProfesor save(TituloProfesor dominio) {
+        ProfesorEntity profesorEntity = entityManager.getReference(ProfesorEntity.class, dominio.getProfesorId());
+        TituloMaestroEntity maestroEntity = entityManager.getReference(TituloMaestroEntity.class, dominio.getTmaId());
+
+        TituloProfesorEntity entity = TituloProfesorEntity.builder()
+                .institutoEgreso(dominio.getInstitutoEgreso())
+                .annoTitulacion(dominio.getAnnoTitulacion())
+                .urlDocumento(dominio.getUrlDocumento())
+                .descripcion(dominio.getDescripcion())
+                .profesor(profesorEntity)
+                .tituloMaestroEntity(maestroEntity)
+                .build();
+
+        TituloProfesorEntity saved = repository.save(entity);
+        dominio.setId(saved.getId());
+        return dominio;
+    }
 }

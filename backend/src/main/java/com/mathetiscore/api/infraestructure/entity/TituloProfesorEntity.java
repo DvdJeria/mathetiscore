@@ -1,10 +1,7 @@
 package com.mathetiscore.api.infraestructure.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -15,9 +12,11 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TituloProfesorEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "tprof_id")
     private UUID id;
 
@@ -42,6 +41,4 @@ public class TituloProfesorEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "titulo_maestros_tma_id", nullable = false)
     private TituloMaestroEntity tituloMaestroEntity; // Guarda el ID del catálogo de títulos
-
-
 }

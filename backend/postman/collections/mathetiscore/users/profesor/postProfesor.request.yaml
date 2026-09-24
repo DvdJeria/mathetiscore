@@ -1,5 +1,5 @@
 $kind: http-request
-url: http://localhost:8080/api/v1/users/profesor
+url: http://localhost:8080/api/v1/profesor
 method: POST
 body:
   type: json
@@ -9,7 +9,7 @@ body:
       "nombre": "Carlos",
       "apellidoPaterno": "González",
       "apellidoMaterno": "Pérez",
-      "email": "carlos.profesor.test4@mathetiscore.com",
+      "email": "carlos.profesor@mathetiscore.com",
       "password": "SecurePassword123*",
       "usuarioDescripcion": "Profesor del departamento de ciencias exactas",
       "profesorDescripcion": "Especialista en álgebra y cálculo superior",

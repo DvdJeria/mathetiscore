@@ -1,16 +1,11 @@
 package com.mathetiscore.api.application.service;
 
-import com.mathetiscore.api.application.dto.request.ProfesorRequestDto;
-import com.mathetiscore.api.application.dto.response.ProfesorResponseDto;
 import com.mathetiscore.api.application.dto.response.UserResponseDto;
-import com.mathetiscore.api.domain.model.Profesor;
-import com.mathetiscore.api.domain.model.Role;
 import com.mathetiscore.api.domain.model.User;
 import com.mathetiscore.api.domain.port.ProfesorRepositoryPort;
 import com.mathetiscore.api.domain.port.UserRepositoryPort;
 import com.mathetiscore.api.infraestructure.repository.jpa.TituloProfesorSpringDataRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -59,8 +54,9 @@ public class UserService {
                 .rolNombre(rolNombre)
                 .build();
     }
-
-    @Transactional
+/*
+*
+* @Transactional
     public ProfesorResponseDto createProfesor(ProfesorRequestDto dto) {
 
         //Insertar el correo y contraseña que vienen del request, al método aislado del servicio
@@ -111,4 +107,6 @@ public class UserService {
                 .rut(usuario.getRut())
                 .build();
     }
+*/
+
 }
